@@ -4,10 +4,41 @@ import { motion } from "motion/react";
 import SplitText from "./components/SplitText";
 import DarkVeil from "./components/DarkVeil";
 
+const USERS = {
+  principal: {
+    password: "principal123",
+    role: "principal",
+    name: "Principal"
+  },
+  hod: {
+    password: "hod123",
+    role: "hod",
+    name: "HOD"
+  },
+  faculty1: {
+    password: "faculty123",
+    role: "faculty",
+    name: "Faculty 1"
+  },
+  faculty2: {
+    password: "faculty123",
+    role: "faculty",
+    name: "Faculty 2"
+  },
+  faculty3: {
+    password: "faculty123",
+    role: "faculty",
+    name: "Faculty 3"
+  }
+};
+
 function App() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+const [role, setRole] = useState(null);
+const [loggedIn, setLoggedIn] = useState(false);
+const [displayName, setDisplayName] = useState("");
 
   const [userError, setUserError] = useState("");
   const [passError, setPassError] = useState("");
@@ -31,6 +62,21 @@ function App() {
     setPassError("");
     return true;
   };
+
+  if (loggedIn) {
+  if (role === "principal") {
+    return <h1 style={{ color: "white" }}>Principal Dashboard</h1>;
+  }
+
+  if (role === "hod") {
+    return <h1 style={{ color: "white" }}>HOD Dashboard</h1>;
+  }
+
+  if (role === "faculty") {
+    return <h1 style={{ color: "white" }}>Faculty Dashboard</h1>;
+  }
+}
+
   return (
          
     // ✅ Main relative container
@@ -54,14 +100,27 @@ function App() {
 >
   <Stepper
   onNext={(nextStep) => {
-    if (nextStep === 2 && username !== "admin") {
-      setUserError("Username is incorrect");
-      return false;
+    // STEP 2 → username check
+    if (nextStep === 2) {
+      if (!USERS[username]) {
+        setUserError("Username not found");
+        return false;
+      }
     }
 
-    if (nextStep === 3 && password !== "admin") {
-      setPassError("Password is incorrect");
-      return false;
+    // STEP 3 → password check
+    if (nextStep === 3) {
+      const user = USERS[username];
+
+      if (user.password !== password) {
+        setPassError("Incorrect password");
+        return false;
+      }
+
+      // ✅ login success
+      setRole(user.role);
+      setDisplayName(user.name);
+      setLoggedIn(true);
     }
 
     setUserError("");
@@ -69,6 +128,7 @@ function App() {
     return true;
   }}
 >
+
       {/* STEP 1 */}
       <Step>
         <h2>Welcome to College Portal</h2>
