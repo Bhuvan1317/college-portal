@@ -39,6 +39,16 @@ function App() {
 const [role, setRole] = useState(null);
 const [loggedIn, setLoggedIn] = useState(false);
 const [displayName, setDisplayName] = useState("");
+const handleLogout = () => {
+  setLoggedIn(false);
+  setRole(null);
+  setDisplayName("");
+  setUsername("");
+  setPassword("");
+  setUserError("");
+  setPassError("");
+};
+
 
   const [userError, setUserError] = useState("");
   const [passError, setPassError] = useState("");
@@ -61,20 +71,49 @@ const [displayName, setDisplayName] = useState("");
     setUserError("");
     setPassError("");
     return true;
-  };
+  };    
 
   if (loggedIn) {
-  if (role === "principal") {
-    return <h1 style={{ color: "white" }}>Principal Dashboard</h1>;
-  }
+  return (
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        background: "#0b0b0b",
+        color: "white",
+        padding: "40px"
+      }}
+    >
+      <button
+        onClick={handleLogout}
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "20px",
+          padding: "8px 14px",
+          borderRadius: "8px",
+          border: "none",
+          cursor: "pointer",
+          background: "#5227ff",
+          color: "white"
+        }}
+      >
+        Logout
+      </button>
 
-  if (role === "hod") {
-    return <h1 style={{ color: "white" }}>HOD Dashboard</h1>;
-  }
+      {role === "principal" && (
+        <h1>Welcome Principal</h1>
+      )}
 
-  if (role === "faculty") {
-    return <h1 style={{ color: "white" }}>Faculty Dashboard</h1>;
-  }
+      {role === "hod" && (
+        <h1>Welcome HOD</h1>
+      )}
+
+      {role === "faculty" && (
+        <h1>Welcome Faculty</h1>
+      )}
+    </div>
+  );
 }
 
   return (
